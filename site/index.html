@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="the bunchy tops — island energy, east coast grit. indie surf and reggae-rock from maui, hawaii.">
+  <title>the bunchy tops | maui, hi</title>
+
+  <!-- Google Fonts: DM Serif Display, Space Grotesk, Space Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Space+Grotesk:wght@300;400&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- ============================================================
+       NAV — mix-blend-difference for universal contrast
+  ============================================================ -->
+  <nav class="nav" id="nav" aria-label="Main navigation">
+    <a href="#hero" class="nav__logo">the bunchy tops</a>
+
+    <div class="nav__links" role="list">
+      <a href="#story" class="nav__link">the story</a>
+      <a href="#music" class="nav__link">music</a>
+      <a href="#gallery" class="nav__link">gallery</a>
+      <a href="#find-us" class="nav__link">find us</a>
+    </div>
+
+    <button class="nav__hamburger" id="hamburger" aria-label="Toggle menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <!-- Mobile fullscreen menu -->
+    <div class="nav__mobile" id="mobile-menu" aria-hidden="true">
+      <a href="#story" class="nav__mobile-link">the story</a>
+      <a href="#music" class="nav__mobile-link">music</a>
+      <a href="#gallery" class="nav__mobile-link">gallery</a>
+      <a href="#find-us" class="nav__mobile-link">find us</a>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ============================================================
+         HERO — video background, massive type
+    ============================================================ -->
+    <header class="hero" id="hero">
+      <div class="hero__media">
+        <video autoplay loop muted playsinline class="hero__video" poster="assets/thumbnails/IMG_5514.jpg">
+          <source src="assets/video/hero-loop.mp4" type="video/mp4">
+        </video>
+        <img src="assets/thumbnails/IMG_5514.jpg" alt="" class="hero__fallback" aria-hidden="true">
+        <div class="hero__overlay"></div>
+      </div>
+
+      <div class="hero__content">
+        <span class="hero__location reveal" data-delay="0">maui, hi</span>
+        <h1 class="hero__title reveal" data-delay="1">the bunchy<br>tops</h1>
+        <p class="hero__tagline reveal" data-delay="2">island energy, east coast grit.</p>
+      </div>
+
+      <div class="hero__scroll reveal" data-delay="3">
+        <div class="hero__scroll-line"></div>
+      </div>
+    </header>
+
+    <!-- Gradient: dark → light -->
+    <div class="transition-gradient transition-gradient--to-light"></div>
+
+    <!-- ============================================================
+         ABOUT — asymmetric editorial layout
+    ============================================================ -->
+    <section class="about" id="story">
+      <div class="about__inner">
+
+        <div class="about__text">
+          <span class="label label--accent reveal">roots</span>
+          <h2 class="heading-xl reveal" data-delay="1">the story</h2>
+
+          <p class="about__bio about__bio--lead reveal" data-delay="2">
+            rooted in reggae and soaked in rock energy, the bunchy tops bring island energy with east coast grit. born from songwriter charlie ward's vision, the band evolved into a full maui-based ensemble.
+          </p>
+          <p class="about__bio reveal" data-delay="2">
+            their music speaks to personal freedom and rejecting societal constraints — honest lyrics over laid-back grooves.
+          </p>
+
+          <div class="about__details reveal" data-delay="3">
+            <div class="about__col">
+              <h3 class="label label--muted">the band</h3>
+              <ul class="about__list">
+                <li>charlie ward <span class="about__role">songwriter / founder</span></li>
+                <li>christian webb</li>
+                <li>gene hew</li>
+                <li>jeffery mccallum</li>
+                <li>michael beegle</li>
+              </ul>
+            </div>
+            <div class="about__col">
+              <h3 class="label label--muted">sound</h3>
+              <ul class="about__list">
+                <li>indie surf</li>
+                <li>lo-fi pop</li>
+                <li>reggae-rock</li>
+                <li>bossa-pop</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overlapping image composition -->
+        <div class="about__visual reveal" data-delay="2">
+          <div class="about__img-main">
+            <img src="assets/thumbnails/IMG_7113.jpg" alt="band rehearsing in garage" class="cinematic-grade" loading="lazy">
+          </div>
+          <div class="about__img-accent">
+            <img src="assets/thumbnails/IMG_1888.jpg" alt="drummer barefoot in jam session" class="cinematic-grade" loading="lazy">
+          </div>
+          <div class="about__color-block" aria-hidden="true"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Gradient: light → dark -->
+    <div class="transition-gradient transition-gradient--to-dark"></div>
+
+    <!-- ============================================================
+         CINEMATIC VIDEO BREAK
+    ============================================================ -->
+    <section class="video-break">
+      <video autoplay loop muted playsinline class="video-break__media cinematic-grade" poster="assets/thumbnails/dji_fly_20250325_124724_635_1742942975517_video.jpg">
+        <source src="assets/video/band-jam.mp4" type="video/mp4">
+      </video>
+      <img src="assets/thumbnails/dji_fly_20250325_124724_635_1742942975517_video.jpg" alt="" class="video-break__fallback cinematic-grade" aria-hidden="true">
+      <div class="video-break__overlay"></div>
+      <h2 class="video-break__text reveal">somewhere the noise<br>fades out.</h2>
+    </section>
+
+    <!-- ============================================================
+         MUSIC — immersive album-art feel
+    ============================================================ -->
+    <section class="music" id="music">
+      <!-- Atmospheric blurs -->
+      <div class="music__glow music__glow--left" aria-hidden="true"></div>
+      <div class="music__glow music__glow--right" aria-hidden="true"></div>
+
+      <div class="music__inner">
+        <div class="music__header reveal">
+          <div>
+            <span class="label label--muted">songs</span>
+            <h2 class="heading-xl heading-xl--light">what we've<br>made</h2>
+          </div>
+          <p class="music__subtitle">two songs, released in 2025.<br>more on the way.</p>
+        </div>
+
+        <div class="music__cards">
+
+          <!-- Castaway -->
+          <article class="music-card reveal" data-delay="1">
+            <div class="music-card__glow" aria-hidden="true"></div>
+            <div class="music-card__body">
+              <div class="music-card__embed">
+                <iframe
+                  src="https://open.spotify.com/embed/track/6XItDrrVY0l8KkOPN4jh2C?utm_source=generator&theme=0"
+                  width="100%" height="352" frameborder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy" title="Castaway on Spotify"
+                ></iframe>
+              </div>
+              <div class="music-card__meta">
+                <h3 class="music-card__title">castaway</h3>
+                <span class="music-card__year">2025</span>
+              </div>
+              <p class="music-card__vibes">sun-drenched &bull; breezy &bull; escapist</p>
+              <p class="music-card__desc">bossa-nova jazz voicings at 100 bpm. ends with the sound of crickets.</p>
+            </div>
+          </article>
+
+          <!-- North Side -->
+          <article class="music-card music-card--offset reveal" data-delay="2">
+            <div class="music-card__glow music-card__glow--alt" aria-hidden="true"></div>
+            <div class="music-card__body">
+              <div class="music-card__embed">
+                <iframe
+                  src="https://open.spotify.com/embed/track/5POJlzAWvE4ETx6qOLpS7F?utm_source=generator&theme=0"
+                  width="100%" height="352" frameborder="0"
+                  allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+                  loading="lazy" title="North Side on Spotify"
+                ></iframe>
+              </div>
+              <div class="music-card__meta">
+                <h3 class="music-card__title">north side</h3>
+                <span class="music-card__year">2025</span>
+              </div>
+              <p class="music-card__vibes">hazy &bull; coastal &bull; hypnotic</p>
+              <p class="music-card__desc">lo-fi bedroom pop at 86 bpm. hypnotic chant-like vocals.</p>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="music__cta reveal" data-delay="3">
+          <a href="https://open.spotify.com/artist/7omklspfylCHnqmLAeonBm" target="_blank" rel="noopener noreferrer" class="btn btn--outline">
+            all songs on spotify
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         GALLERY — horizontal scroll exhibition
+    ============================================================ -->
+    <section class="gallery" id="gallery">
+      <div class="gallery__header">
+        <span class="label label--muted reveal">visuals</span>
+        <h2 class="heading-xl heading-xl--light reveal" data-delay="1">moments</h2>
+      </div>
+
+      <div class="gallery__track" id="gallery-track">
+        <figure class="gallery__item gallery__item--wide">
+          <img src="assets/thumbnails/IMG_5514.jpg" alt="full band on porch with string lights" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <figure class="gallery__item gallery__item--tall">
+          <img src="assets/thumbnails/IMG_5517.jpg" alt="band performing, singer with bass" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <figure class="gallery__item gallery__item--cinematic">
+          <img src="assets/thumbnails/dji_fly_20250325_124724_635_1742942975517_video.jpg" alt="Maui waterfall into ocean" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <figure class="gallery__item gallery__item--square">
+          <img src="assets/thumbnails/IMG_3188.jpg" alt="Haleakala crater at dawn" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <figure class="gallery__item gallery__item--portrait">
+          <img src="assets/thumbnails/IMG_1888.jpg" alt="drummer barefoot in garage" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <figure class="gallery__item gallery__item--cinematic">
+          <img src="assets/thumbnails/dji_fly_20250329_112738_658_1743283886158_video.jpg" alt="waterfall with rainbow" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <figure class="gallery__item gallery__item--wide">
+          <img src="assets/thumbnails/IMG_7113.jpg" alt="band rehearsing from behind" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <figure class="gallery__item gallery__item--tall">
+          <img src="assets/thumbnails/IMG_2838.jpg" alt="coastal vegetation with ocean" class="gallery__img cinematic-grade" loading="lazy">
+        </figure>
+        <div class="gallery__spacer"></div>
+      </div>
+
+      <div class="gallery__hint reveal">
+        <span class="gallery__hint-line"></span>
+        <span class="gallery__hint-text">scroll to explore</span>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         INSTAGRAM — styled photo grid linking to profile
+    ============================================================ -->
+    <section class="instagram" id="instagram">
+      <div class="instagram__header reveal">
+        <div>
+          <h2 class="heading-md">follow along</h2>
+          <p class="instagram__subtitle">life between the songs</p>
+        </div>
+        <a href="https://www.instagram.com/thebunchytops/" target="_blank" rel="noopener noreferrer" class="instagram__handle">@thebunchytops</a>
+      </div>
+
+      <div class="instagram__grid reveal" data-delay="1">
+        <a href="https://www.instagram.com/thebunchytops/" target="_blank" rel="noopener noreferrer" class="instagram__post">
+          <img src="assets/thumbnails/IMG_5517.jpg" alt="band performing live" class="instagram__img cinematic-grade" loading="lazy">
+          <div class="instagram__overlay">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/thebunchytops/" target="_blank" rel="noopener noreferrer" class="instagram__post">
+          <img src="assets/thumbnails/IMG_1888.jpg" alt="drummer barefoot in garage" class="instagram__img cinematic-grade" loading="lazy">
+          <div class="instagram__overlay">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/thebunchytops/" target="_blank" rel="noopener noreferrer" class="instagram__post">
+          <img src="assets/thumbnails/dji_fly_20250329_112738_658_1743283886158_video.jpg" alt="waterfall with rainbow" class="instagram__img cinematic-grade" loading="lazy">
+          <div class="instagram__overlay">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/thebunchytops/" target="_blank" rel="noopener noreferrer" class="instagram__post">
+          <img src="assets/thumbnails/IMG_5514.jpg" alt="band on porch at night" class="instagram__img cinematic-grade" loading="lazy">
+          <div class="instagram__overlay">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/thebunchytops/" target="_blank" rel="noopener noreferrer" class="instagram__post">
+          <img src="assets/thumbnails/IMG_3188.jpg" alt="Haleakala crater" class="instagram__img cinematic-grade" loading="lazy">
+          <div class="instagram__overlay">
+            <svg viewBox="0 0 24 24" fill="currentColor" width="24" height="24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+          </div>
+        </a>
+        <a href="https://www.instagram.com/thebunchytops/" target="_blank" rel="noopener noreferrer" class="instagram__post instagram__post--cta">
+          <span class="instagram__cta-text">see more on instagram</span>
+          <svg viewBox="0 0 24 24" fill="currentColor" width="32" height="32"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ============================================================
+       FOOTER
+  ============================================================ -->
+  <footer class="footer" id="find-us">
+    <h2 class="footer__ghost">the bunchy tops</h2>
+
+    <div class="footer__inner">
+      <div class="footer__left">
+        <p class="footer__tagline">somewhere the noise fades out.</p>
+        <p class="footer__location">maui, hawaii</p>
+      </div>
+
+      <div class="footer__right">
+        <a href="https://www.instagram.com/thebunchytops" target="_blank" rel="noopener noreferrer" class="footer__icon-link" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+        </a>
+        <a href="https://open.spotify.com/artist/7omklspfylCHnqmLAeonBm" target="_blank" rel="noopener noreferrer" class="footer__icon-link" aria-label="Spotify">
+          <svg viewBox="0 0 24 24" fill="currentColor" width="22" height="22"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.66.301 1.02zm1.44-3.3c-.301.42-.84.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.84.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        </a>
+        <a href="mailto:thebunchytops@gmail.com" class="footer__booking">booking</a>
+      </div>
+    </div>
+
+    <p class="footer__copy">&copy; <span id="footer-year"></span> the bunchy tops</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
