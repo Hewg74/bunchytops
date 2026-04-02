@@ -16,3 +16,5 @@ site/assets/video/*-full.mp4
 # OS
 .DS_Store
 Thumbs.db
+
+.vercel
