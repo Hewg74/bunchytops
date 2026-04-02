@@ -74,14 +74,14 @@
 ## 4. VERBAL IDENTITY
 
 ### 4.1 Tone of Voice
-**The voice of a close friend sitting next to you on the tailgate of a truck after the sun has gone down, talking about life over a slow acoustic jam.**
+**How a band member would actually text their group chat.**
 > **Traces back to:** The conversational, mid-range vocal delivery in *Castaway* and the repetitive, hypnotic, chant-like lyrics of *North Side*.
 
-1.  **Grounded:** Rooted in physical reality. We talk about the weather, the water, and the dirt.
-2.  **Unrushed:** Sentences are paced rhythmically. No exclamation-point-heavy hype.
-3.  **Reflective:** We acknowledge the grind of society, but choose to look past it.
-4.  **Inclusive:** "We" and "Us" rather than "I" and "Me." It's a collective experience.
-5.  **Subtly Gritty:** Honest and slightly rough around the edges. We don't pretend life is a perfect vacation.
+1.  **Casual:** Write like you're texting, not captioning. "band practice" is a fine caption.
+2.  **Short:** 2-8 words is usually enough. A full sentence is the max.
+3.  **Not trying:** If it sounds clever or poetic, rewrite it simpler. Never sounds like a social media manager wrote it.
+4.  **Boring is ok:** "good tuesday" is better than "the kind of tuesday where nothing happens and everything matters."
+5.  **Real:** Typos and abbreviations are fine. We're not a brand, we're a band.
 
 ### 4.2 Vocabulary Guide
 > **Traces back to:** The thematic rejection of societal constraints and the blend of island/east coast identities.
@@ -97,19 +97,26 @@
 
 *   **Rules:** Short sentences. Let the visual and the audio do the heavy lifting. Lowercase letters are encouraged for an indie, unpretentious feel. Lead with an observation, end with an invitation.
 
-**5 On-Brand Captions:**
-1.  "sun went down. amps stayed on. new jam in the bio."
-2.  "nowhere to be and all day to get there."
-3.  "east coast roots, maui dirt. playing the north shore tonight at 8."
-4.  "some songs are just an excuse to turn your phone off for four minutes. 'castaway' is out now."
-5.  "caught a groove on the porch and let it run. what are you listening to tonight?"
+**On-Brand Captions:**
+1.  "band practice"
+2.  "new one up"
+3.  "good tuesday"
+4.  "playing tonight come thru"
+5.  "porch jams"
+6.  "sunset was nice"
+7.  "wrote something yesterday"
+8.  "north shore friday at 8"
+9.  "no plans today"
+10. "this one's done 🌊"
 
-**5 Off-Brand Captions (Cautionary):**
-1.  "🚨 NEW MUSIC ALERT!! 🚨 Go stream our new banger Castaway right now!! Link in bio 🔥🔥🔥" *(Too loud, too desperate).*
-2.  "We are so incredibly humbled and blessed to announce our new single..." *(Too formal and cliché).*
-3.  "Who's ready to party this weekend?! 🍻" *(Wrong energy level).*
-4.  "Please pre-save our song, it really helps the Spotify algorithm!" *(Kills the escapist vibe).*
-5.  "Just a couple of guys being dudes! 🤪" *(Too goofy; undermines the musical sophistication).*
+**Off-Brand Captions (Cautionary):**
+1.  "🚨 NEW MUSIC ALERT!! 🚨 Go stream Castaway right now!! 🔥🔥🔥" *(desperate)*
+2.  "We are so incredibly humbled and blessed to announce..." *(corporate)*
+3.  "nowhere to be and all day to get there." *(tryhard poetic — sounds like a copywriter)*
+4.  "the kind of tuesday where nothing happens and everything matters." *(way too crafted)*
+5.  "salt in the hair, amp on ten. new jam in the bio." *(this is a caption, not a text)*
+6.  "Please pre-save our song, it really helps the algorithm!" *(marketing)*
+7.  "caught a groove on the porch and let it run." *(sounds like a brand wrote it)*
 
 ### 4.4 Emoji Policy
 > **Traces back to:** The organic, nature-driven sound design (crickets, acoustic guitars).
