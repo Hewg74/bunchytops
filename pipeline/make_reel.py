@@ -10,8 +10,6 @@ import os
 import subprocess
 import time
 
-from google import genai
-
 PLAN_MODEL = os.environ.get("GEMINI_PLAN_MODEL", "gemini-3.1-pro-preview")
 BASE = os.path.dirname(os.path.abspath(__file__))
 CATALOG = os.path.join(BASE, "catalog.json")
@@ -61,6 +59,7 @@ def save_json(obj, path):
 
 
 def plan(catalog, used):
+    from google import genai  # deferred so validate()/render() import without the SDK
     client = genai.Client()
     prompt = PLAN_PROMPT.format(
         brand=BRAND, tracks=json.dumps(TRACKS), used=json.dumps(sorted(used)),
@@ -74,21 +73,28 @@ def plan(catalog, used):
 
 def validate(p, catalog):
     """Reject hallucinated clips, out-of-range cuts, unknown tracks — before ffmpeg runs."""
-    cuts = p.get("cuts") or []
-    if not 3 <= len(cuts) <= 8:
-        raise ValueError(f"bad cut count: {len(cuts)}")
+    if not isinstance(p, dict):
+        raise ValueError(f"plan is not an object: {p!r}")
+    cuts = p.get("cuts")
+    if not isinstance(cuts, list) or not 3 <= len(cuts) <= 8:
+        raise ValueError(f"bad cuts shape/count: {cuts!r}")
     for c in cuts:
-        meta = catalog.get(c["clip"])
+        if not isinstance(c, dict):
+            raise ValueError(f"malformed cut: {c!r}")
+        meta = catalog.get(c.get("clip"))
         if meta is None:
-            raise ValueError(f"clip not in catalog: {c['clip']}")
-        start, dur = float(c["start_s"]), float(c["duration_s"])
+            raise ValueError(f"clip not in catalog: {c.get('clip')!r}")
+        try:
+            start, dur = float(c["start_s"]), float(c["duration_s"])
+        except (KeyError, TypeError, ValueError):
+            raise ValueError(f"malformed cut timing: {c!r}") from None
         if not (0 <= start and 1.0 <= dur <= 6.0 and start + dur <= meta["duration"] + 0.5):
             raise ValueError(f"cut out of range for {c['clip']}: {start}+{dur}s "
                              f"(clip is {meta['duration']}s)")
     total = sum(float(c["duration_s"]) for c in cuts)
     if not 12 <= total <= 35:
         raise ValueError(f"bad total duration: {total}s")
-    if p.get("audio_track") not in TRACKS:
+    if not isinstance(p.get("audio_track"), str) or p["audio_track"] not in TRACKS:
         raise ValueError(f"unknown audio track: {p.get('audio_track')}")
     if not isinstance(p.get("caption"), str) or not p["caption"].strip():
         raise ValueError("missing caption")
