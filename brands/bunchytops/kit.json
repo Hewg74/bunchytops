@@ -1,0 +1,133 @@
+{
+  "$schema_version": "1.0",
+  "meta": {
+    "slug": "bunchytops",
+    "name": "The Bunchy Tops",
+    "industry": "independent band (reggae-rock / indie surf, Maui HI)",
+    "positioning": "island energy, east coast grit — sun-faded indie surf, windows-down at 2pm, never resort-tropical",
+    "audience": "16-35 surfers/skaters/creatives; Maui locals; Mac DeMarco / Ocean Alley / Jack Johnson listeners",
+    "primary_goal": "convert visitors into Spotify listeners and IG followers; get locals to shows",
+    "maturity": "thin (2 singles, real footage/photos, no logo system — full rebrand engagement, blank slate)"
+  },
+  "register": {
+    "aesthetic_family": "vintage-surf-poster (retro screenprint x washed-out film x editorial)",
+    "mood": ["sunny", "washed-out", "unhurried", "hand-made", "easy"],
+    "reference_worlds": [
+      "THE band's own gig poster (brands/bunchytops/reference-gig-poster.jpg) — the canonical reference: illustrated truck on a coastal cliff, halftone print texture, chunky 70s hand-lettered two-tone title with dark keyline",
+      "a 1970s surf-competition screenprint poster — dusty inks, misregistered layers, cream paper",
+      "an overexposed 35mm beach photo — highlights blown soft, color faded",
+      "windows-down coast drive at 2pm, salt on the windshield"
+    ],
+    "anti_references": [
+      "resort-tropical tourism sites (hibiscus, saturated cyan, 'paradise')",
+      "hype EDM/artist-agency sites (strobe, countdown timers, STREAM NOW)",
+      "clean SaaS landing grammar (centered hero + 3-card features)",
+      "dark moody nocturne register (the rejected first draft — this brand lives in daylight)"
+    ],
+    "dials": { "variance": 7, "motion": 5, "density": 3 },
+    "extrapolation_principle": "USER DIRECTIVE (2026-07-06, locked with the hero): the gig poster is the SEED, not the spec — extrapolate the vibe, don't replicate the artifact. The poster's DNA concentrates in display type (bounced keylined two-tone), texture (paper/halftone/keylines), and palette; layout, motion, and interaction should speak fluent WEB — scroll-driven moments, layered video, live players, things paper can't do. Literal poster pastiche in every section is an anti-pattern; a section that feels like the poster's world without quoting it is the target.",
+    "precedence": ["a11y contrast", "performance (video weight)", "motion richness", "density"]
+  },
+  "tokens": {
+    "color": {
+      "space": "srgb",
+      "seed": "bleached beach paper + sun-flare apricot, everything 20% desaturated with lifted blacks",
+      "roles": {
+        "canvas": { "hex": "#F2EBDA", "name": "Poster Paper", "note": "page background — aged cream print stock, never pure white" },
+        "surface": { "hex": "#EAE0C9", "name": "Aged Paper", "note": "cards, alternating sections — one value step down, like a second sheet" },
+        "surface-deep": { "hex": "#46655F", "name": "Sea Pine", "note": "the poster's sage-teal ocean, deepened — the ONE dark anchor section (music slabs)" },
+        "ink": { "hex": "#3B322A", "name": "Walnut", "note": "primary text + keylines — warm print-brown, never pure black" },
+        "ink-muted": { "hex": "#6A6252", "name": "Driftwood", "note": "secondary text — the ONLY second text value per bg; AA-body on canvas and surface" },
+        "ink-on-deep": { "hex": "#F2EEE3", "name": "Salt", "note": "text on Sea Pine" },
+        "accent": { "hex": "#C4785A", "name": "Dusty Terracotta", "note": "the poster's BUNCHY ink — CTA fills, display-type fills (ALWAYS with Walnut keyline at display size), marks; never running text" },
+        "accent-2": { "hex": "#D9A741", "name": "Mustard", "note": "the poster's TOPS ink — the second display-type fill and small marks; two-tone alternation with Terracotta is the title signature; never running text" },
+        "wild": { "hex": "#9DB3A2", "name": "Sage Sea", "note": "the poster's ocean sage — sub-headline display type, dividers, section tints" }
+      },
+      "motion_aliases": { "flare": "Mustard at 0.10 alpha for soft sun washes", "trail": "ink at 0.18 alpha for dub-echo ghosts", "misprint": "Terracotta and Sage Sea at 0.5 alpha, ±2px offset, for the print-misregistration hover" },
+      "contrast_target": "4.5:1 body, 3:1 large display"
+    },
+    "type": {
+      "display": { "family": "Chango", "fallback": "Titan One", "case": "UPPERCASE for the wordmark/hero title (poster register); lowercase ok for section titles", "tracking": "0.01em", "line_height": 1.0, "note": "chunky 70s hand-lettered bubble per the gig poster — display fills in Dusty Terracotta / Mustard two-tone with a 2-3px Walnut keyline (-webkit-text-stroke) + offset shadow; NEVER naked accent-colored type without the keyline", "hand_pulled_bounce": "flat-set display type is BANNED at hero/wordmark size — hand-lettered means irregular: wrap each glyph in a span with a deterministic bounce pattern (baseline offset cycling roughly -0.06em/+0.03em/-0.02em/+0.05em, rotation ±2.5deg alternating, scale 0.97-1.06), occasional letter dropped/raised harder like the poster's Y and S; pattern is fixed (no runtime random) so it renders identically every load; keyline+shadow apply per glyph; reduced-motion unaffected (this is static layout, not animation)" },
+      "body": { "family": "Space Grotesk", "weights": [300, 400, 500], "leading": 1.6, "min_px": 16 },
+      "mono": { "family": "Space Mono", "use": "gig dates, track metadata, footer legalese — uppercase, +0.08em tracking, zine-label register" },
+      "scale": "clamp-based; hero clamp(56px, 9vw, 128px); ratio 1.333 below display"
+    },
+    "space": { "base": 8, "section_desktop": 112, "section_mobile": 64, "note": "spacious — the groove needs air" },
+    "radius": { "default": 4, "media": 8, "note": "barely rounded; driftwood, not bubble" },
+    "motion_tokens": {
+      "eases": {
+        "swell": "cubic-bezier(0.25, 0.1, 0.0, 1.0)",
+        "undertow": "cubic-bezier(0.6, 0.0, 0.15, 1.0)",
+        "skank": "cubic-bezier(0.3, 1.4, 0.4, 1.0)"
+      },
+      "default_duration": "800ms enter / 250ms exit",
+      "note": "slow and easy — the site grooves at 90 BPM, never bounces"
+    },
+    "elevation": "no drop shadows; depth via surface value steps and soft sun-flare washes (box-shadow 0 0 64px flare-alias)"
+  },
+  "imagery": {
+    "strategy": "real-first — band footage and Maui landscape only; zero stock, zero AI-generated people",
+    "ground_in_real": ["site/assets/video/hero-loop*.mp4", "site/assets/video/band-jam*.mp4", "site/assets/thumbnails/*.jpg"],
+    "art_direction": "sun-wash everything: lift blacks hard (faded shadows, no true black), bloom the highlights soft and warm (overexposed 35mm), desaturate ~20%, slight warm cast; film grain overlay at 0.04-0.06 opacity on all media; daytime drone/coast footage leads — night garage clips are the exception, used small and graded to match the wash, never full-bleed"
+  },
+  "motion": {
+    "intensity": 5,
+    "recipes": [
+      "dub-echo entrance: element enters with one soft ghost trail (translateY 28px -> 0, ghost at trail-alias alpha lagging 120ms), ease swell",
+      "heat-haze drift: hero media and large display type drift very slowly (scale 1.0 -> 1.04 over scroll), like heat shimmer — barely perceptible",
+      "sun-flare wash: sections enter with a soft warm bloom sweep (flare-alias gradient translating through), 1200ms, once per section",
+      "print misregistration: on hover/focus of display type and poster-panel media, the misprint-alias color layers offset ±2px for 400ms ease skank — like a screenprint pulled slightly off-registration",
+      "walking-bass parallax: hero video at 0.35 ratio, layered type drifts at 0.15 — slow, behind-the-beat",
+      "marquee tide: gig/track ticker drifts at 28s/loop, pauses on hover"
+    ],
+    "reduced_motion_contract": "all scroll scrub and drift off; entrances become 200ms opacity fades",
+    "perf": { "device_tiering": "poster-first video, loop only >= 768px + save-data off", "lcp_target": "<= 2.5s on 4G" }
+  },
+  "atmosphere": {
+    "engine": "video",
+    "spec": {
+      "hero": "daytime drone/coast footage (band-jam.mp4 is the daytime clip), sun-washed + slight warm print grade via CSS filter, soft paper-bleach scrim",
+      "grain": "SVG fractalNoise pseudo-element, full-page, opacity 0.05, pointer-events none",
+      "halftone": "subtle halftone-dot layer (radial-gradient dot matrix, ~3px pitch, Walnut at 0.03-0.05 alpha) over media and the dark anchor section — the screenprint tell",
+      "paper": "very soft paper-fiber texture on canvas via the grain filter's low-frequency octave; edges of media get a 1px Walnut keyline frame like poster panels"
+    }
+  },
+  "layout": {
+    "hero_archetype": "film still (LOCKED at hero-lock): full-bleed sun-washed video, editorial type block low-left, mono metadata line top-right, REC/frame-counter framing — flyer meets film still, now in daylight",
+    "section_order": ["hero", "music (two singles as full-width editorial slabs w/ embedded players)", "story (garage/roots)", "live+photos (gallery)", "instagram", "footer (shows, contact, socials)"],
+    "nav": "minimal fixed top bar — wordmark left, three lowercase links + sun-flare 'listen' pill right; backdrop blur over canvas",
+    "grid": "12-col fluid, max 1360px, gutters 24px; slabs may break the grid full-bleed",
+    "industry_patterns": ["music embeds (Spotify) styled to theme", "behold.so IG widget retained", "shows list even if empty ('no shows booked — check back')"]
+  },
+  "copy": {
+    "voice": "how a band member texts the group chat: lowercase, 2-8 words, zero marketing energy, boring is ok",
+    "reading_level": "casual conversational",
+    "length_rule": "headlines <= 5 words; body paragraphs <= 3 sentences",
+    "banned_words": ["hustle", "grind", "epic", "banger", "stream now", "vibes (as a noun in copy)", "paradise", "aloha spirit", "journey", "elevate"],
+    "exemplars": {
+      "good": ["band practice", "new one up", "playing tonight come thru", "written on the north side", "no plans today"],
+      "bad": ["Experience the sound of the islands!", "We're so humbled to announce...", "the kind of tuesday where nothing happens and everything matters"]
+    }
+  },
+  "conversion": {
+    "primary_cta": "listen on Spotify (persistent sun-flare pill + per-song embeds)",
+    "journeys": ["hear 30 seconds of a song without leaving the page", "follow on Instagram", "find the next show"],
+    "trust_signals": ["real footage of real jams", "Spotify embeds with actual play counts", "live IG feed"]
+  },
+  "constraints": {
+    "a11y": "WCAG AA contrast on light canvas; focus-visible rings in Sun Flare; reduced-motion honored",
+    "performance": "static site, no framework runtime; GSAP + ScrollTrigger only JS; videos lazy + poster",
+    "stack": "static HTML/CSS/JS (Vite optional), GSAP motion spine, deploys to existing Vercel project",
+    "compliance": "none",
+    "assets_available": "2 hero/jam video loops (+full versions), 8 photos, 2 Spotify singles, behold.so feed id in current site"
+  },
+  "anti_patterns": [
+    { "ban": "pure #000 or #fff anywhere", "reason": "washed-out means lifted blacks and bloomed (not clipped) whites; haze is the brand" },
+    { "ban": "saturated tropical cyan/teal/hibiscus palettes", "reason": "tourist Hawaii — the band is local surf-indie culture, not a resort" },
+    { "ban": "dark moody nocturne as the page's base register", "reason": "rejected at hero-lock; the rebrand lives in bleached daylight — dark exists only as the single Washed Ocean anchor section" },
+    { "ban": "hype language, urgency, fire emoji energy", "reason": "86-100 BPM music; desperate marketing breaks the easy trust" },
+    { "ban": "snappy sub-300ms entrance animations", "reason": "the motion register is behind-the-beat; quick pops read as SaaS" },
+    { "ban": "centered-everything template layout", "reason": "editorial low-left/asymmetric composition is the film-still signature (locked)" },
+    { "ban": "fully saturated color anywhere", "reason": "every hue passes through the wash — ~20% desaturated, sun-faded; saturation reads as digital, not film" }
+  ]
+}

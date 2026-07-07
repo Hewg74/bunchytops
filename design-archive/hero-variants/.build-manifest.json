@@ -1,0 +1,23 @@
+{
+  "site_type": "brand-microsite/landing (hero variants only)",
+  "tracks": [],
+  "dials": { "variance": 7, "motion": 6, "density": 3 },
+  "design_read": "brand-microsite hero for a Maui reggae-rock band's night-garage rebrand; nocturnal-hazy-editorial language; flyer-meets-film-still cinematic composition",
+  "library_query_cmd": "node ~/.claude/skills/frontend-taste/components/query.mjs --type hero --vibe cinematic,organic,editorial --motion 5-7",
+  "components_pulled": [
+    { "id": "split-zone-color-video-hero", "source": "library", "section": "hero", "variant": "a (film still)",
+      "note": "adapted: floating low-left type block + mono slide-counter identity + word/line reveal; hard color-seam swapped for a gradient scrim into canvas per kit atmosphere spec" },
+    { "id": "svg-text-cutout-blur-panel", "source": "library", "section": "hero", "variant": "b (the flyer)",
+      "note": "giant lowercase Fraunces 'bunchytops' cut out of a frosted garage-blue slab; band-jam footage sharp through the glyphs; slab rotated off-grid with staple marks + mono zine labels" },
+    { "id": "mix-blend-screen-video-hero", "source": "library", "section": "hero", "variant": "c (string lights)",
+      "note": "adapted to opacity+blur haze register since footage is night-blue not black-bg; drives the ghosted footage behind the light strand" },
+    { "id": "tungsten-light-strand", "source": "invented", "section": "hero", "variant": "c (string lights)",
+      "reason": "no strung-light organizing mechanic in library; a strand of independently-flickering tungsten light-blooms on a hung wire, each bulb a radial-bloom + point light per the kit string-light-flicker recipe (2-4s randomized). Library grade: slots=bulb positions; motion tokens=per-bulb --dur/--del; reduced-motion=all animation off. Decompose back into components/hero/." }
+  ],
+  "techniques_consulted": [
+    { "name": "text roll button", "source": "invented", "used_for": "listen tungsten pill hover/glow (translateY + tungsten box-shadow bloom)",
+      "reason": "used a glow-bloom pill treatment rather than a catalog roll; candidate: 'tungsten-glow-pill'" },
+    { "name": "dub-echo entrance", "source": "invented", "used_for": "headline lines rise translateY 28->0 with one ghost trail at trail-alpha lagging 120ms, ease swell",
+      "reason": "kit-native motion recipe (not from motionsites catalog); candidate for decomposing into references" }
+  ]
+}

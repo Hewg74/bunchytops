@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>the bunchy tops - poster cut</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Chango&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --canvas: #F2EBDA; --surface: #EAE0C9; --surface-deep: #46655F;
+    --ink: #3B322A; --ink-muted: #6A6252; --ink-on-deep: #F2EEE3;
+    --accent: #C4785A; --accent-2: #D9A741; --wild: #9DB3A2;
+    --flare: rgba(217,167,65,0.10); --trail: rgba(59,50,42,0.18);
+    --misprint-a: rgba(196,120,90,0.5); --misprint-b: rgba(157,179,162,0.5);
+    --swell: cubic-bezier(0.25, 0.1, 0.0, 1.0);
+    --undertow: cubic-bezier(0.6, 0.0, 0.15, 1.0);
+    --skank: cubic-bezier(0.3, 1.4, 0.4, 1.0);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--canvas); color: var(--ink);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    line-height: 1.6; overflow-x: hidden; min-height: 100dvh;
+  }
+  ::selection { background: var(--accent-2); color: var(--ink); }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .grain {
+    position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.05;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: multiply;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 80;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px clamp(20px, 5vw, 56px);
+    backdrop-filter: blur(14px) saturate(1.05);
+    background: linear-gradient(180deg, rgba(242,235,218,0.82) 0%, rgba(242,235,218,0.0) 100%);
+  }
+  /* wordmark: Chango caps, Walnut keyline, SUBTLE hand-pulled bounce per glyph */
+  .wordmark {
+    font-family: "Chango", "Titan One", cursive; font-weight: 400; font-size: 20px;
+    text-transform: uppercase; letter-spacing: 0.01em; color: var(--accent);
+    -webkit-text-stroke: 1px var(--ink); paint-order: stroke fill;
+    line-height: 1.5;
+  }
+  .wordmark .wg { display: inline-block; transform-origin: center 60%; }
+  .wordmark .wg:nth-child(3n+1) { transform: translateY(-0.02em) rotate(-1deg); }
+  .wordmark .wg:nth-child(3n+2) { transform: translateY(0.02em) rotate(1deg); }
+  .wordmark .wg:nth-child(3n+3) { transform: translateY(-0.01em) rotate(0.5deg); }
+  .nav-right { display: flex; align-items: center; gap: clamp(16px, 3vw, 32px); }
+  .nav-links { display: flex; gap: clamp(14px, 2.5vw, 28px); }
+  .nav-links a { font-size: 13px; color: var(--ink-muted); transition: color 250ms var(--undertow); }
+  .nav-links a:hover { color: var(--ink); }
+  .pill-listen {
+    font-family: "Space Mono", monospace; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink); background: var(--accent);
+    padding: 9px 20px; border-radius: 999px; font-weight: 700;
+    transition: transform 250ms var(--undertow), box-shadow 400ms var(--swell);
+  }
+  .pill-listen:hover { transform: translateY(-1px); box-shadow: 0 0 40px var(--flare); }
+  @media (max-width: 620px) { .nav-links { display: none; } }
+
+  .hero { position: relative; min-height: 100dvh; width: 100%; overflow: hidden; background: var(--canvas); }
+  .hero::after {
+    content: ""; position: absolute; inset: 10px; z-index: 3; pointer-events: none;
+    border: 1px solid rgba(59,50,42,0.35); border-radius: 4px;
+  }
+  .hero-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
+    filter: brightness(1.16) contrast(0.82) saturate(0.70) sepia(0.06);
+    animation: heathaze 22s ease-in-out infinite alternate;
+    transform-origin: 55% 45%;
+  }
+  @keyframes heathaze { 0% { transform: scale(1.0); } 100% { transform: scale(1.035); } }
+
+  .halftone {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none; mix-blend-mode: multiply;
+    background-image: radial-gradient(circle, rgba(59,50,42,0.05) 0.8px, transparent 0.9px);
+    background-size: 3px 3px;
+  }
+
+  .grade-bloom {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none; mix-blend-mode: screen;
+    background:
+      radial-gradient(90% 96% at 58% 8%, rgba(242,235,218,0.42) 0%, rgba(242,235,218,0.10) 46%, transparent 66%),
+      radial-gradient(66% 60% at 18% 82%, rgba(157,179,162,0.22) 0%, transparent 58%);
+  }
+  .grade-wash {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(180deg, rgba(242,235,218,0.20) 0%, rgba(242,235,218,0.06) 36%, rgba(242,235,218,0.96) 100%);
+  }
+  .grade-scrim {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background: linear-gradient(102deg, rgba(242,235,218,0.90) 0%, rgba(242,235,218,0.48) 40%, transparent 66%);
+  }
+
+  .meta {
+    position: absolute; top: clamp(80px, 11vh, 116px); right: clamp(20px, 5vw, 56px);
+    z-index: 5; text-align: right;
+    font-family: "Space Mono", monospace; font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink); line-height: 1.9;
+    background: rgba(242,235,218,0.46); backdrop-filter: blur(6px);
+    padding: 10px 14px; border-radius: 4px;
+  }
+  .meta .rec { color: var(--ink); }
+  .meta .rec::before {
+    content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--accent); margin-right: 7px; vertical-align: middle;
+    animation: recpulse 2.4s ease-in-out infinite;
+  }
+  @keyframes recpulse { 0%,100% { opacity: 0.55; } 50% { opacity: 1; } }
+  .counter {
+    position: absolute; bottom: clamp(36px, 6vh, 56px); right: clamp(20px, 5vw, 56px);
+    z-index: 5; font-family: "Space Mono", monospace; font-size: 12px;
+    letter-spacing: 0.08em; color: var(--ink);
+    background: rgba(242,235,218,0.46); backdrop-filter: blur(6px);
+    padding: 6px 12px; border-radius: 4px;
+  }
+  .counter b { color: var(--ink); font-weight: 700; }
+
+  .hero-copy {
+    position: absolute; left: clamp(20px, 5vw, 56px); bottom: clamp(48px, 9vh, 96px);
+    z-index: 6; max-width: min(820px, 88vw);
+  }
+  .eyebrow {
+    font-family: "Space Mono", monospace; font-size: 12px; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--surface-deep); margin-bottom: 18px; display: inline-block;
+    font-weight: 700; border-bottom: 2px solid var(--accent); padding-bottom: 3px;
+  }
+  h1 {
+    font-family: "Chango", "Titan One", cursive; font-weight: 400; letter-spacing: 0.01em;
+    line-height: 1.2; font-size: clamp(52px, 8.5vw, 116px);
+    text-transform: uppercase; margin-bottom: 24px;
+  }
+  .line-title {
+    position: relative; display: block; -webkit-text-stroke: 2.5px var(--ink);
+    paint-order: stroke fill; text-shadow: 5px 5px 0 var(--ink);
+    transition: text-shadow 400ms var(--skank);
+  }
+  .line-title.terra { color: var(--accent); }
+  .line-title.mustard { color: var(--accent-2); }
+  /* hand-pulled bounce: each glyph inline-block, deterministic offset/rotate/scale cycle,
+     two letters (windows' S, day's Y) dropped/raised harder like the poster. Static, not animated. */
+  .g { display: inline-block; transform-origin: center 60%; }
+  .w { white-space: nowrap; } /* words never break across lines: glyph spans made letters wrappable */
+  .g:nth-child(4n+1) { transform: translateY(-0.06em) rotate(-2.5deg) scale(1.04); }
+  .g:nth-child(4n+2) { transform: translateY(0.03em) rotate(2.5deg) scale(0.98); }
+  .g:nth-child(4n+3) { transform: translateY(-0.02em) rotate(-1.5deg) scale(1.06); }
+  .g:nth-child(4n+4) { transform: translateY(0.05em) rotate(2deg) scale(0.97); }
+  .g.hard-up { transform: translateY(-0.11em) rotate(-3deg) scale(1.05); }
+  .g.hard-down { transform: translateY(0.10em) rotate(3.5deg) scale(1.02); }
+  /* print-misregistration on hover: applies to the whole bounced line via inherited text-shadow */
+  .line-title:hover {
+    text-shadow: 5px 5px 0 var(--ink), -2px 0 0 var(--misprint-a), 2px 0 0 var(--misprint-b);
+  }
+  .sub { font-size: clamp(15px, 1.4vw, 18px); color: var(--ink-muted); max-width: 46ch; margin-bottom: 30px; font-weight: 300; }
+  .cta-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .btn {
+    font-family: "Space Mono", monospace; font-size: 13px; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 14px 30px; border-radius: 999px;
+    transition: transform 250ms var(--undertow), box-shadow 400ms var(--swell),
+                background 250ms var(--undertow), color 250ms var(--undertow);
+  }
+  /* Walnut on Terracotta ~3.7:1 (AA-large pass); walnut preferred per poster logic, swap to Salt for AA-normal */
+  .btn-primary { background: var(--accent); color: var(--ink); font-weight: 700; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 48px var(--flare); }
+  .btn-ghost { border: 1px solid rgba(59,50,42,0.32); color: var(--ink); background: rgba(242,235,218,0.30); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video { display: none; }
+    .hero { background: var(--canvas) url("../../site/assets/thumbnails/dji_fly_20250325_124724_635_1742942975517_video.jpg") center/cover; }
+    .meta .rec::before { animation: none; }
+    .line-title { transition: none; }
+    .line-title:hover { text-shadow: 5px 5px 0 var(--ink); }
+    * { animation-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav>
+    <a class="wordmark" href="#" aria-label="bunchytops"><span class="wg" aria-hidden="true">b</span><span class="wg" aria-hidden="true">u</span><span class="wg" aria-hidden="true">n</span><span class="wg" aria-hidden="true">c</span><span class="wg" aria-hidden="true">h</span><span class="wg" aria-hidden="true">y</span><span class="wg" aria-hidden="true">t</span><span class="wg" aria-hidden="true">o</span><span class="wg" aria-hidden="true">p</span><span class="wg" aria-hidden="true">s</span></a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#music">music</a>
+        <a href="#story">story</a>
+        <a href="#shows">shows</a>
+      </div>
+      <a class="pill-listen" href="#listen">listen</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <video class="hero-video" autoplay loop muted playsinline
+      poster="../../site/assets/thumbnails/dji_fly_20250325_124724_635_1742942975517_video.jpg">
+      <source src="../../site/assets/video/band-jam.mp4" type="video/mp4" />
+    </video>
+    <div class="grade-bloom" aria-hidden="true"></div>
+    <div class="halftone" aria-hidden="true"></div>
+    <div class="grade-wash" aria-hidden="true"></div>
+    <div class="grade-scrim" aria-hidden="true"></div>
+
+    <div class="meta" aria-hidden="true">
+      <div class="rec">rec</div>
+      <div>maui hi &middot; windward</div>
+      <div>35mm &middot; overexposed</div>
+    </div>
+    <div class="counter" aria-hidden="true"><b>01</b> / 02 &middot; coast-drone</div>
+
+    <div class="hero-copy">
+      <span class="eyebrow" data-anim>reggae-rock &middot; paia hi</span>
+      <h1 aria-label="windows down all day">
+        <span class="line-title terra" data-anim aria-hidden="true"><span class="w"><span class="g">w</span><span class="g">i</span><span class="g">n</span><span class="g">d</span><span class="g">o</span><span class="g">w</span><span class="g hard-up">s</span></span> <span class="w"><span class="g">d</span><span class="g">o</span><span class="g">w</span><span class="g">n</span></span></span>
+        <span class="line-title mustard" data-anim aria-hidden="true"><span class="w"><span class="g">a</span><span class="g">l</span><span class="g">l</span></span> <span class="w"><span class="g">d</span><span class="g">a</span><span class="g hard-down">y</span></span></span>
+      </h1>
+      <p class="sub" data-anim>two singles up on spotify. coast drive, no plans, sun so bright it washes the color out.</p>
+      <div class="cta-row" data-anim>
+        <a class="btn btn-primary" href="#listen">listen</a>
+        <a class="btn btn-ghost" href="#shows">shows</a>
+      </div>
+    </div>
+  </header>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce && window.gsap) {
+      const swell = "power2.out";
+      const items = gsap.utils.toArray("[data-anim]");
+      gsap.set(items, { y: 28, opacity: 0 });
+      const tl = gsap.timeline({ delay: 0.25 });
+      items.forEach((el, i) => tl.to(el, { y: 0, opacity: 1, duration: 0.8, ease: swell }, i * 0.14));
+    } else {
+      gsap && gsap.set("[data-anim]", { opacity: 1, y: 0 });
+    }
+    const v = document.querySelector(".hero-video");
+    if (v) v.playbackRate = 0.85;
+  </script>
+</body>
+</html>

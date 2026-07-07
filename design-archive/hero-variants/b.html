@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>the bunchy tops - the flyer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,380;9..144,460;9..144,560&family=Space+Grotesk:wght@300;400;500&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --canvas: #0C1522; --surface: #22364E; --surface-deep: #152535;
+    --ink: #F2EDE2; --ink-muted: #9FAFBB;
+    --accent: #E8A24D; --accent-2: #B4593A; --wild: #2E4A3B;
+    --glow: rgba(232,162,77,0.14); --trail: rgba(242,237,226,0.22);
+    --swell: cubic-bezier(0.25, 0.1, 0.0, 1.0);
+    --undertow: cubic-bezier(0.6, 0.0, 0.15, 1.0);
+    --skank: cubic-bezier(0.3, 1.4, 0.4, 1.0);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--canvas); color: var(--ink);
+    font-family: "Space Grotesk", system-ui, sans-serif;
+    line-height: 1.6; overflow-x: hidden; min-height: 100dvh;
+  }
+  ::selection { background: var(--accent); color: var(--canvas); }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+  .grain {
+    position: fixed; inset: 0; z-index: 90; pointer-events: none; opacity: 0.06;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+  }
+
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 80;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px clamp(20px, 5vw, 56px);
+    backdrop-filter: blur(14px) saturate(1.1);
+    background: linear-gradient(180deg, rgba(12,21,34,0.72) 0%, rgba(12,21,34,0.0) 100%);
+  }
+  .wordmark { font-family: "Fraunces", serif; font-weight: 460; font-size: 20px; letter-spacing: -0.02em; }
+  .nav-right { display: flex; align-items: center; gap: clamp(16px, 3vw, 32px); }
+  .nav-links { display: flex; gap: clamp(14px, 2.5vw, 28px); }
+  .nav-links a { font-size: 13px; color: var(--ink-muted); transition: color 250ms var(--undertow); }
+  .nav-links a:hover { color: var(--ink); }
+  .pill-listen {
+    font-family: "Space Mono", monospace; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--canvas); background: var(--accent);
+    padding: 9px 20px; border-radius: 999px; font-weight: 700;
+    transition: transform 250ms var(--undertow), box-shadow 400ms var(--swell);
+  }
+  .pill-listen:hover { transform: translateY(-1px); box-shadow: 0 0 40px var(--glow); }
+  @media (max-width: 620px) { .nav-links { display: none; } }
+
+  /* ---- the flyer stage ---- */
+  .hero { position: relative; min-height: 100dvh; overflow: hidden; }
+  /* the video plays edge-to-edge behind everything, night-graded */
+  .hero-video {
+    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0;
+    filter: brightness(0.72) contrast(1.08) saturate(1.05);
+  }
+  .grade-wash {
+    position: absolute; inset: 0; z-index: 1; pointer-events: none;
+    background:
+      radial-gradient(60% 70% at 20% 15%, rgba(232,162,77,0.09) 0%, transparent 55%),
+      linear-gradient(180deg, rgba(21,37,53,0.20) 0%, rgba(12,21,34,0.35) 100%);
+  }
+
+  /* the frosted slab: giant lowercase wordmark is CUT OUT so video shows sharp through the glyphs */
+  .slab {
+    position: absolute; z-index: 2;
+    left: 4%; right: 4%; top: 22vh; bottom: 20vh;
+    background: rgba(21,37,53,0.44);
+    backdrop-filter: blur(22px) saturate(1.05);
+    -webkit-backdrop-filter: blur(22px) saturate(1.05);
+    -webkit-mask-image: url(#cutoutMask); mask-image: url(#cutoutMask);
+    border-radius: 4px;
+    /* off-grid: slab sits skewed like a stapled flyer */
+    transform: rotate(-1.4deg);
+  }
+  /* stapled-flyer corner marks */
+  .staple { position: absolute; z-index: 6; width: 22px; height: 8px; background: var(--accent-2); border-radius: 2px; opacity: 0.85; }
+  .staple.tl { left: 6%; top: 20vh; transform: rotate(-24deg); }
+  .staple.br { right: 6%; bottom: 18vh; transform: rotate(-24deg); }
+
+  /* zine labels stapled around the wordmark */
+  .zine {
+    position: absolute; z-index: 7;
+    font-family: "Space Mono", monospace; font-size: 12px; letter-spacing: 0.10em;
+    text-transform: uppercase; color: var(--ink);
+  }
+  .zine.top-l { top: calc(22vh - 34px); left: 4%; color: var(--accent); }
+  .zine.top-r { top: calc(22vh - 34px); right: 4%; color: var(--ink-muted); text-align: right; }
+  .zine.mid { top: 50%; right: 6%; transform: translateY(-50%) rotate(90deg); transform-origin: right center; color: var(--ink-muted); }
+
+  /* copy block below the slab, low-left, editorial */
+  .flyer-foot {
+    position: absolute; z-index: 7; left: clamp(20px, 5vw, 56px);
+    bottom: clamp(40px, 8vh, 84px); max-width: min(640px, 88vw);
+  }
+  .flyer-foot h2 {
+    font-family: "Fraunces", serif; font-weight: 460; text-transform: lowercase;
+    letter-spacing: -0.02em; line-height: 1.02;
+    font-size: clamp(26px, 4vw, 46px); margin-bottom: 8px;
+  }
+  .flyer-foot .ghost { color: var(--trail); }
+  .flyer-foot p {
+    font-family: "Space Mono", monospace; font-size: 12px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--ink-muted); margin-bottom: 22px;
+  }
+  .cta-row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .btn {
+    font-family: "Space Mono", monospace; font-size: 13px; letter-spacing: 0.06em;
+    text-transform: uppercase; padding: 14px 30px; border-radius: 999px;
+    transition: transform 250ms var(--undertow), box-shadow 400ms var(--swell),
+                border-color 250ms var(--undertow), color 250ms var(--undertow);
+  }
+  .btn-primary { background: var(--accent); color: var(--canvas); font-weight: 700; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 48px var(--glow); }
+  .btn-ghost { border: 1px solid rgba(242,237,226,0.28); color: var(--ink); }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* on narrow screens the cutout goes tighter and slab straightens a touch */
+  @media (max-width: 620px) {
+    .slab { top: 18vh; bottom: 30vh; transform: rotate(-1deg); }
+    .zine.mid { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-video { display: none; }
+    .slab { background: rgba(21,37,53,0.30); }
+    /* keep a still poster behind the cutout so the mechanic still reads */
+    .hero { background: var(--surface-deep) url("../../site/assets/thumbnails/IMG_3188.jpg") center/cover; }
+    .flyer-foot .ghost { display: none; }
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+</style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <!-- SVG cutout mask: white rect = blur passes; black text = holes the sharp video shows through -->
+  <svg width="0" height="0" aria-hidden="true"><defs>
+    <mask id="cutoutMask">
+      <rect width="100%" height="100%" fill="white" />
+      <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central"
+        fill="black" font-family="Fraunces, serif" font-weight="560"
+        font-size="240" letter-spacing="-0.04em"
+        textLength="94%" lengthAdjust="spacingAndGlyphs">bunchytops</text>
+    </mask>
+  </defs></svg>
+
+  <nav>
+    <a class="wordmark" href="#">bunchytops</a>
+    <div class="nav-right">
+      <div class="nav-links">
+        <a href="#music">music</a>
+        <a href="#story">story</a>
+        <a href="#shows">shows</a>
+      </div>
+      <a class="pill-listen" href="#listen">listen</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <video class="hero-video" autoplay loop muted playsinline
+      poster="../../site/assets/thumbnails/IMG_3188.jpg">
+      <source src="../../site/assets/video/band-jam.mp4" type="video/mp4" />
+    </video>
+    <div class="grade-wash" aria-hidden="true"></div>
+
+    <div class="zine top-l" data-anim>two singles &middot; out now</div>
+    <div class="zine top-r" data-anim>maui hi<br />reggae-rock</div>
+    <div class="zine mid" data-anim>recorded in the garage</div>
+
+    <span class="staple tl" aria-hidden="true"></span>
+    <span class="staple br" aria-hidden="true"></span>
+    <div class="slab" data-slab aria-label="bunchytops"></div>
+
+    <div class="flyer-foot">
+      <h2 data-anim><span class="ghost" aria-hidden="true" style="position:absolute">playing tonight</span>playing tonight</h2>
+      <p data-anim>come thru &middot; north side &middot; after dark</p>
+      <div class="cta-row" data-anim>
+        <a class="btn btn-primary" href="#listen">listen</a>
+        <a class="btn btn-ghost" href="#shows">shows</a>
+      </div>
+    </div>
+  </header>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script>
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce && window.gsap) {
+      const swell = "power2.out";
+      // slab drops in first (dub-echo feel), then labels + foot settle
+      gsap.set("[data-slab]", { y: 40, opacity: 0, rotate: -3 });
+      gsap.set("[data-anim]", { y: 26, opacity: 0 });
+      const tl = gsap.timeline({ delay: 0.2 });
+      tl.to("[data-slab]", { y: 0, opacity: 1, rotate: -1.4, duration: 0.9, ease: swell });
+      tl.to("[data-anim]", { y: 0, opacity: 1, duration: 0.8, ease: swell, stagger: 0.1 }, "-=0.55");
+    } else {
+      gsap && gsap.set("[data-slab],[data-anim]", { opacity: 1, y: 0, rotate: -1.4 });
+    }
+    const v = document.querySelector(".hero-video");
+    if (v) v.playbackRate = 0.8;
+  </script>
+</body>
+</html>

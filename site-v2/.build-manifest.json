@@ -1,0 +1,31 @@
+{
+  "site_type": "brand-microsite/landing (band, single-page scroll)",
+  "tracks": [],
+  "dials": { "variance": 7, "motion": 5, "density": 3 },
+  "design_read": "vintage-surf-poster register extrapolated to web: poster DNA (bounced keylined two-tone display, halftone/paper/keyline texture, dusty palette) carried into web-native layout, layered video, and live players per the kit's extrapolation_principle.",
+  "library_query_cmd": "node ~/.claude/skills/frontend-taste/components/query.mjs --type hero --vibe cinematic,organic,editorial --motion 5-7 ; --type music --motion 3-7 ; --type features --vibe retro,organic,editorial --motion 4-6 ; --type gallery --vibe retro,organic,playful --motion 4-6 ; --type footer",
+  "components_pulled": [
+    { "id": "split-zone-color-video-hero", "source": "library", "section": "hero",
+      "note": "seed for the film-still hero (full-bleed washed video + editorial low-left block + mono metadata); evolved through hero-lock into the locked a5 poster treatment" },
+    { "id": "poster-title-hand-pulled-bounce", "source": "invented", "section": "hero",
+      "reason": "no library block for hand-lettered two-tone display: per-glyph deterministic bounce (nth-child offset/rotate/scale cycle + two hard-pulled letters), two-tone terracotta/mustard fills with per-glyph Walnut keyline + offset shadow, print-misregistration on hover. Library grade: slots=title words + hard-letter indices; motion=static layout (reduced-motion safe); decompose into components/hero/." },
+    { "id": "editorial-anchor-embed-slab", "source": "invented", "section": "music",
+      "reason": "query --type music returned NO MATCH. Full-width slabs on the Sea Pine anchor with halftone, alternating embed/copy columns, keylined poster-panel chrome around the un-restylable Spotify iframe, two-tone slab titles. Library grade: slots=track id/title/year/desc, offset flag; decompose into a new components/music/ type." },
+    { "id": "editorial-bio-keyline-panel", "source": "invented", "section": "story",
+      "reason": "features matches (cloud-transition manifesto, inline-image-tabs, luxe property cards) were all off-fit for a six-friends bio. Two-column editorial bio + one keylined, sun-graded photo panel with misregistration hover. Decompose into components/features/." },
+    { "id": "social-post-card-grid", "source": "library", "section": "gallery",
+      "note": "adapted: the fixed square-panel contact-sheet grid became keyline-framed poster panels with the sun-wash grade, halftone-world texture, 1.05 slow-zoom + print-misregistration hover; staggered fade-rise reveal kept." },
+    { "id": "giant-watermark-wordmark", "source": "library", "section": "footer",
+      "note": "the brand name cast as a viewport-spanning stroked watermark across the footer floor over the Sea Pine anchor." }
+  ],
+  "techniques_consulted": [
+    { "name": "hand-pulled bounce", "source": "invented", "used_for": "hero title + wordmark per-glyph irregularity",
+      "reason": "kit-native display rule (tokens.type.display.hand_pulled_bounce), candidate to decompose into references" },
+    { "name": "print misregistration hover", "source": "invented", "used_for": "title + media panels offset misprint colors ±2px on hover",
+      "reason": "kit-native motion recipe; candidate for the catalog" },
+    { "name": "halftone screenprint overlay", "source": "invented", "used_for": "media + anchor sections screenprint dot matrix",
+      "reason": "kit atmosphere addition; candidate for the catalog" },
+    { "name": "sun-wash media grade", "source": "invented", "used_for": "overexposed-35mm CSS filter on all real footage/photos",
+      "reason": "kit imagery.art_direction; candidate for the catalog" }
+  ]
+}
