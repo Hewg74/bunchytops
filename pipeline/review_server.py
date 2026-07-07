@@ -2,13 +2,16 @@
 
 Approve -> publishes via publish.py (if META_ACCESS_TOKEN is set) and moves to published/.
 Reject -> moves to rejected/ and returns the clips to the unused pool.
-Access is gated by a secret path token. Env: REVIEW_TOKEN, PORT (default 8037),
-plus publish.py's vars for live posting.
+State changes are POST-only (link prefetchers can't trigger them); access is gated by a
+secret path token. Threaded server: Meta fetches the video from us WHILE approve blocks
+polling Meta, so a single-threaded server would deadlock.
+Env: REVIEW_TOKEN, PORT (default 8037), plus publish.py's vars for live posting.
 """
+import html
 import json
 import os
 import shutil
-from http.server import HTTPServer, SimpleHTTPRequestHandler
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 
 import publish
@@ -24,9 +27,11 @@ PAGE = """<!doctype html><meta name=viewport content="width=device-width,initial
 ITEM = """<div style="margin-bottom:2em;border:1px solid #7B9095;padding:1em;border-radius:8px">
 <video src="/{token}/video/{rid}" controls playsinline style="width:100%;border-radius:6px"></video>
 <pre style="white-space:pre-wrap">{caption}</pre>
-<a href="/{token}/approve/{rid}" style="background:#DCA74E;color:#2B2B2B;padding:.6em 1.2em;
-border-radius:6px;text-decoration:none;font-weight:bold">post it</a>
-<a href="/{token}/reject/{rid}" style="color:#C16E4F;padding:.6em 1.2em">nah</a></div>"""
+<form method=post action="/{token}/approve/{rid}" style="display:inline">
+<button style="background:#DCA74E;color:#2B2B2B;padding:.6em 1.2em;border:0;
+border-radius:6px;font-weight:bold">post it</button></form>
+<form method=post action="/{token}/reject/{rid}" style="display:inline">
+<button style="background:none;color:#C16E4F;padding:.6em 1.2em;border:0">nah</button></form></div>"""
 
 
 def pending():
@@ -40,54 +45,60 @@ def return_clips_to_pool(rid):
     used_path = os.path.join(BASE, "posted.json")
     plan = json.load(open(os.path.join(QUEUE, rid, "plan.json")))
     used = set(json.load(open(used_path))) if os.path.exists(used_path) else set()
-    json.dump(sorted(used - {c["clip"] for c in plan["cuts"]}), open(used_path, "w"))
+    tmp = used_path + ".tmp"
+    json.dump(sorted(used - {c["clip"] for c in plan["cuts"]}), open(tmp, "w"))
+    os.replace(tmp, used_path)
 
 
 class Handler(SimpleHTTPRequestHandler):
-    def do_GET(self):
+    def _route(self):
         parts = urlparse(self.path).path.strip("/").split("/")
         if not parts or parts[0] != TOKEN:
-            self.send_error(404)
-            return
+            return None, None
         action = parts[1] if len(parts) > 1 else "list"
         rid = parts[2] if len(parts) > 2 else None
-        if rid and (rid not in pending()):
-            self.send_error(404)
-            return
+        if rid is not None and rid not in pending():
+            return None, None
+        return action, rid
 
+    def do_GET(self):
+        action, rid = self._route()
         if action == "list":
             items = "".join(ITEM.format(
                 token=TOKEN, rid=r,
-                caption=open(os.path.join(QUEUE, r, "caption.txt"), encoding="utf-8").read())
+                caption=html.escape(
+                    open(os.path.join(QUEUE, r, "caption.txt"), encoding="utf-8").read()))
                 for r in pending()) or "<p>nothing pending</p>"
             body = PAGE.format(items=items).encode()
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
             self.end_headers()
             self.wfile.write(body)
-        elif action == "video":
+        elif action == "video" and rid:
             self.path = f"/queue/{rid}/reel.mp4"
             super().do_GET()
-        elif action == "approve":
-            caption = open(os.path.join(QUEUE, rid, "caption.txt"), encoding="utf-8").read()
-            if os.environ.get("META_ACCESS_TOKEN"):
-                url = f"{os.environ['PUBLIC_BASE_URL']}/{TOKEN}/video/{rid}"
-                media_id = publish.publish_reel(url, caption)
-                msg = f"posted (media id {media_id})"
-            else:
-                msg = "approved - no META_ACCESS_TOKEN set, marked ready for manual posting"
-            shutil.move(os.path.join(QUEUE, rid), os.path.join(BASE, "published", rid))
-            self._redirect(msg)
-        elif action == "reject":
-            return_clips_to_pool(rid)
-            shutil.move(os.path.join(QUEUE, rid), os.path.join(BASE, "rejected", rid))
-            self._redirect("rejected, clips returned to pool")
         else:
             self.send_error(404)
 
-    def _redirect(self, msg):
+    def do_POST(self):
+        action, rid = self._route()
+        if action == "approve" and rid:
+            caption = open(os.path.join(QUEUE, rid, "caption.txt"), encoding="utf-8").read()
+            if os.environ.get("META_ACCESS_TOKEN"):
+                url = f"{os.environ['PUBLIC_BASE_URL']}/{TOKEN}/video/{rid}"
+                publish.publish_reel(url, caption)
+            shutil.move(os.path.join(QUEUE, rid), os.path.join(BASE, "published", rid))
+            self._redirect()
+        elif action == "reject" and rid:
+            return_clips_to_pool(rid)
+            shutil.move(os.path.join(QUEUE, rid), os.path.join(BASE, "rejected", rid))
+            self._redirect()
+        else:
+            self.send_error(404)
+
+    def _redirect(self):
         self.send_response(303)
-        self.send_header("Location", f"/{TOKEN}/list?m={msg}")
+        self.send_header("Location", f"/{TOKEN}/list")
         self.end_headers()
 
 
@@ -97,4 +108,4 @@ if __name__ == "__main__":
     os.makedirs(os.path.join(BASE, "rejected"), exist_ok=True)
     port = int(os.environ.get("PORT", 8037))
     print(f"review queue on :{port}/{TOKEN}/list")
-    HTTPServer(("0.0.0.0", port), Handler).serve_forever()
+    ThreadingHTTPServer(("0.0.0.0", port), Handler).serve_forever()

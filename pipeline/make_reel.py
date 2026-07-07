@@ -1,8 +1,9 @@
 """Generate one Instagram Reel from the catalog: Gemini plans the cuts, ffmpeg renders.
 
-Output lands in queue/<id>/ (reel.mp4, caption.txt, plan.json) for the review server.
-Tracks clip usage in posted.json so footage isn't repeated until the pool runs dry.
-Env: GOOGLE_API_KEY.
+The plan is validated against the catalog before ffmpeg runs — a hallucinated clip name,
+out-of-range timestamp, or unknown audio track fails loudly into cron.log instead of
+rendering garbage. Output lands in queue/<id>/ for the review server; clip usage is
+tracked in posted.json. Env: GOOGLE_API_KEY. Optional: GEMINI_PLAN_MODEL.
 """
 import json
 import os
@@ -11,6 +12,7 @@ import time
 
 from google import genai
 
+PLAN_MODEL = os.environ.get("GEMINI_PLAN_MODEL", "gemini-3.1-pro-preview")
 BASE = os.path.dirname(os.path.abspath(__file__))
 CATALOG = os.path.join(BASE, "catalog.json")
 USED = os.path.join(BASE, "posted.json")
@@ -29,16 +31,16 @@ Grounded and nostalgic, never hype. No neon-tropical cliches, no exclamation mar
 The Bunchy Tops - six friends playing reggae-rock on Maui."""
 
 PLAN_PROMPT = """You are the video editor for The Bunchy Tops. Below is a catalog of raw footage
-(clip name -> metadata + timestamped moments) and the list of already-used clips.
+(clip file -> metadata + timestamped moments) and the list of already-used clips.
 
 Brand: {brand}
 
 Plan ONE Instagram Reel. Rules:
 - 5-7 cuts, 20-28s total, each cut 2.5-4.5s.
-- Prefer clips NOT in the used list. Only moments the catalog marks ig_worthy.
+- Use ONLY clip files that appear as keys in the catalog. Prefer clips NOT in the used list.
 - Build a cohesive arc: scenic/curiosity hook -> band/groove build -> a closing shot with identity
   (signage, wide band shot, or sunset). Don't jumble unrelated settings mid-arc.
-- Pick an audio track and window from: {tracks}
+- Pick an audio track and start second from one of the windows in: {tracks}
 - Write a caption in the brand voice (1-2 short lines) + 5-8 hashtags including #thebunchytops #mauimusic.
 
 Used clips: {used}
@@ -47,9 +49,15 @@ Catalog:
 {catalog}
 
 Return STRICT JSON (no fences):
-{{"cuts": [{{"clip": "IMG_1234.MOV", "start_s": 3.0, "duration_s": 3.5, "why": "..."}}],
+{{"cuts": [{{"clip": "<catalog key>", "start_s": 3.0, "duration_s": 3.5, "why": "..."}}],
   "audio_track": "castaway", "audio_start_s": 58,
   "caption": "...", "hashtags": ["..."], "concept": "one-line description of the arc"}}"""
+
+
+def save_json(obj, path):
+    tmp = path + ".tmp"
+    json.dump(obj, open(tmp, "w"))
+    os.replace(tmp, path)
 
 
 def plan(catalog, used):
@@ -57,21 +65,43 @@ def plan(catalog, used):
     prompt = PLAN_PROMPT.format(
         brand=BRAND, tracks=json.dumps(TRACKS), used=json.dumps(sorted(used)),
         catalog=json.dumps(catalog, indent=0))
-    r = client.models.generate_content(model="gemini-3.1-pro-preview", contents=prompt)
+    r = client.models.generate_content(model=PLAN_MODEL, contents=prompt)
     txt = r.text.strip()
     if txt.startswith("```"):
         txt = txt.split("```")[1].lstrip("json").strip()
     return json.loads(txt)
 
 
-def render(p, out_path):
+def validate(p, catalog):
+    """Reject hallucinated clips, out-of-range cuts, unknown tracks — before ffmpeg runs."""
+    cuts = p.get("cuts") or []
+    if not 3 <= len(cuts) <= 8:
+        raise ValueError(f"bad cut count: {len(cuts)}")
+    for c in cuts:
+        meta = catalog.get(c["clip"])
+        if meta is None:
+            raise ValueError(f"clip not in catalog: {c['clip']}")
+        start, dur = float(c["start_s"]), float(c["duration_s"])
+        if not (0 <= start and 1.0 <= dur <= 6.0 and start + dur <= meta["duration"] + 0.5):
+            raise ValueError(f"cut out of range for {c['clip']}: {start}+{dur}s "
+                             f"(clip is {meta['duration']}s)")
+    total = sum(float(c["duration_s"]) for c in cuts)
+    if not 12 <= total <= 35:
+        raise ValueError(f"bad total duration: {total}s")
+    if p.get("audio_track") not in TRACKS:
+        raise ValueError(f"unknown audio track: {p.get('audio_track')}")
+    if not isinstance(p.get("caption"), str) or not p["caption"].strip():
+        raise ValueError("missing caption")
+
+
+def render(p, catalog, out_path):
     cuts = p["cuts"]
-    total = sum(c["duration_s"] for c in cuts)
+    total = sum(float(c["duration_s"]) for c in cuts)
     audio = os.path.join(AUDIO_DIR, TRACKS[p["audio_track"]]["file"])
     inputs, filters, vlabels = [], [], []
     for i, c in enumerate(cuts):
         inputs += ["-ss", str(c["start_s"]), "-t", str(c["duration_s"]),
-                   "-i", os.path.join(CLIPS, c["clip"])]
+                   "-i", os.path.join(CLIPS, catalog[c["clip"]]["file"])]
         filters.append(f"[{i}:v]scale=1080:1920:force_original_aspect_ratio=increase,"
                        f"crop=1080:1920,fps=30,setsar=1,format=yuv420p[v{i}]")
         vlabels.append(f"[v{i}]")
@@ -86,22 +116,24 @@ def render(p, out_path):
 
 
 def main():
-    catalog = json.load(open(CATALOG))
+    raw = json.load(open(CATALOG))
     used = json.load(open(USED)) if os.path.exists(USED) else []
-    usable = {k: v for k, v in catalog.items()
-              if v.get("analysis", {}).get("ig_worthy")}
-    if not usable:
+    # key by clip file name; only clips Gemini judged usable
+    catalog = {v["file"]: v for v in raw.values()
+               if v.get("analysis", {}).get("ig_worthy")}
+    if not catalog:
         raise SystemExit("no ig_worthy clips in catalog - run catalog.py first")
 
-    p = plan(usable, used)
+    p = plan(catalog, used)
+    validate(p, catalog)
     reel_id = time.strftime("%Y%m%d-%H%M%S")
     out_dir = os.path.join(QUEUE, reel_id)
     os.makedirs(out_dir, exist_ok=True)
-    render(p, os.path.join(out_dir, "reel.mp4"))
+    render(p, catalog, os.path.join(out_dir, "reel.mp4"))
     with open(os.path.join(out_dir, "caption.txt"), "w", encoding="utf-8") as f:
         f.write(p["caption"] + "\n\n" + " ".join(p["hashtags"]))
-    json.dump(p, open(os.path.join(out_dir, "plan.json"), "w"), indent=1)
-    json.dump(sorted(set(used) | {c["clip"] for c in p["cuts"]}), open(USED, "w"))
+    save_json(p, os.path.join(out_dir, "plan.json"))
+    save_json(sorted(set(used) | {c["clip"] for c in p["cuts"]}), USED)
     print("queued", reel_id, "-", p["concept"])
 
 

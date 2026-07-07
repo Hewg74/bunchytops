@@ -24,6 +24,14 @@ Drive folder → Gemini analysis → cut plan → ffmpeg render → review queue
 Without `META_ACCESS_TOKEN` set, everything still works — approved reels just land in
 `published/` for manual posting instead of going to Instagram.
 
+Optional env overrides: `GEMINI_VIDEO_MODEL` (default `gemini-3.5-flash`, used for clip
+analysis) and `GEMINI_PLAN_MODEL` (default `gemini-3.1-pro-preview`, used for cut planning) —
+swap without code changes if Google renames models.
+
+The review page is plain HTTP gated by the secret URL token; approve/reject are POST-only so
+link scanners can't trigger them. If you want transport encryption too, put Caddy in front
+(`caddy reverse-proxy --from your.domain --to :8037`) or access the box over Tailscale.
+
 ## Meta app setup (one-time, ~10 min)
 
 1. https://developers.facebook.com → **Create App** → type "Business".

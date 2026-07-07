@@ -1,7 +1,9 @@
 """Sync the public Drive folder, proxy new clips, catalog them with Gemini video analysis.
 
-Run on a schedule (cron). Idempotent: skips clips already downloaded/cataloged.
-Env: GOOGLE_API_KEY (aistudio.google.com/apikey). Optional: FOLDER_ID.
+Run on a schedule (cron, flock-guarded in run.sh). Idempotent: keyed by Drive file id,
+so duplicate/renamed display names can't collide; downloads land as .part first so a
+killed run never leaves a truncated file that gets trusted forever.
+Env: GOOGLE_API_KEY (aistudio.google.com/apikey). Optional: FOLDER_ID, GEMINI_VIDEO_MODEL.
 """
 import json
 import os
@@ -13,6 +15,7 @@ import urllib.request
 from google import genai
 
 FOLDER_ID = os.environ.get("FOLDER_ID", "1B_UDw8-3s_qnJ61HD4xJcoJspwqflLjd")
+VIDEO_MODEL = os.environ.get("GEMINI_VIDEO_MODEL", "gemini-3.5-flash")
 BASE = os.path.dirname(os.path.abspath(__file__))
 CLIPS = os.path.join(BASE, "clips")
 PROXIES = os.path.join(BASE, "proxies")
@@ -35,6 +38,12 @@ Watch this clip and return STRICT JSON (no markdown fences):
 List 1-5 moments, only ones genuinely usable in an Instagram Reel. Be honest about quality problems."""
 
 
+def save_json(obj, path):
+    tmp = path + ".tmp"
+    json.dump(obj, open(tmp, "w"), indent=1)
+    os.replace(tmp, path)
+
+
 def list_folder():
     url = f"https://drive.google.com/embeddedfolderview?id={FOLDER_ID}#list"
     html = urllib.request.urlopen(url).read().decode()
@@ -42,13 +51,17 @@ def list_folder():
 
 
 def download(file_id, dest):
-    subprocess.run(["gdown", "--id", file_id, "-O", dest, "--quiet"], check=True)
+    part = dest + ".part"
+    subprocess.run(["gdown", "--id", file_id, "-O", part, "--quiet"], check=True)
+    os.replace(part, dest)
 
 
 def make_proxy(src, dst):
+    part = dst + ".part.mp4"
     subprocess.run(["ffmpeg", "-y", "-v", "error", "-i", src,
                     "-vf", "scale=-2:360", "-c:v", "libx264", "-preset", "fast", "-crf", "30",
-                    "-c:a", "aac", "-ac", "1", "-b:a", "64k", dst], check=True)
+                    "-c:a", "aac", "-ac", "1", "-b:a", "64k", part], check=True)
+    os.replace(part, dst)
 
 
 def probe(path):
@@ -68,7 +81,7 @@ def analyze(client, path):
         f = client.files.get(name=f.name)
     if f.state == "FAILED":
         return {"error": "gemini processing failed"}
-    r = client.models.generate_content(model="gemini-3.1-flash", contents=[ANALYZE_PROMPT, f])
+    r = client.models.generate_content(model=VIDEO_MODEL, contents=[ANALYZE_PROMPT, f])
     txt = r.text.strip()
     if txt.startswith("```"):
         txt = txt.split("```")[1].lstrip("json").strip()
@@ -85,12 +98,14 @@ def main():
     client = genai.Client()
 
     for file_id, name in list_folder():
-        if name in catalog:
+        if file_id in catalog:
             continue
         if not re.search(r"\.(mov|mp4|m4v)$", name, re.I):
             continue
-        local = os.path.join(CLIPS, name)
-        proxy = os.path.join(PROXIES, os.path.splitext(name)[0] + ".mp4")
+        # prefix with the id so duplicate display names can't overwrite each other
+        fname = f"{file_id[:8]}_{re.sub(r'[^\\w.-]', '_', name)}"
+        local = os.path.join(CLIPS, fname)
+        proxy = os.path.join(PROXIES, os.path.splitext(fname)[0] + ".mp4")
         try:
             if not os.path.exists(local):
                 print("downloading", name)
@@ -98,11 +113,12 @@ def main():
             if not os.path.exists(proxy):
                 make_proxy(local, proxy)
             entry = probe(local)
-            entry["drive_id"] = file_id
+            entry["name"] = name
+            entry["file"] = fname
             print("analyzing", name)
             entry["analysis"] = analyze(client, proxy)
-            catalog[name] = entry
-            json.dump(catalog, open(CATALOG, "w"), indent=1)
+            catalog[file_id] = entry
+            save_json(catalog, CATALOG)
         except Exception as e:  # one bad clip must not kill the nightly run
             print("FAIL", name, e)
 
