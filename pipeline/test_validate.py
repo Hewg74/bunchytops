@@ -1,6 +1,6 @@
 # PBT harness for pipeline/make_reel.py validate() — extracted verbatim (module imports
 # google.genai which isn't needed for this pure function).
-from make_reel import TRACKS, validate
+from make_reel import TRACKS, snap_to_beats, validate
 from hypothesis import HealthCheck, given, settings, strategies as st
 
 settings.register_profile("pbt", suppress_health_check=[HealthCheck.too_slow],
@@ -30,6 +30,9 @@ def good_plan(draw, catalog):
         cuts.append({"clip": k, "start_s": start, "duration_s": dur})
     return {"cuts": cuts, "audio_track": draw(st.sampled_from(list(TRACKS))),
             "audio_start_s": 58,
+            "template": draw(st.sampled_from(["cinematic", "punchy"])),
+            "hook_text": draw(st.none() | st.text(st.characters(codec="ascii"),
+                                                  min_size=1, max_size=48)),
             "caption": draw(st.text(st.characters(codec="ascii"), min_size=1, max_size=40))}
 
 
@@ -64,6 +67,8 @@ BAD = [
     lambda p, c: p.update(caption="   "),
     lambda p, c: p.update(cuts=p["cuts"][:2]),
     lambda p, c: p.update(cuts=p["cuts"] * 4),
+    lambda p, c: p.update(template="vaporwave"),
+    lambda p, c: p.update(hook_text="x" * 49),
 ]
 
 
@@ -95,7 +100,8 @@ json_junk = st.recursive(
 
 @settings(max_examples=1000)
 @given(plan=st.dictionaries(st.sampled_from(
-    ["cuts", "audio_track", "caption", "audio_start_s", "extra"]), json_junk, max_size=5),
+    ["cuts", "audio_track", "caption", "audio_start_s", "template", "hook_text", "extra"]),
+    json_junk, max_size=7),
     data=st.data())
 def test_junk_raises_cleanly(plan, data):
     catalog = data.draw(catalog_st())
@@ -108,7 +114,26 @@ def test_junk_raises_cleanly(plan, data):
         pass  # the contract
 
 
+# P4: beat-snapped durations stay on the beat grid AND inside the clip
+@settings(max_examples=500)
+@given(st.data())
+def test_snap_to_beats(data):
+    catalog = data.draw(catalog_st())
+    p = data.draw(good_plan(catalog))
+    try:
+        validate(p, catalog)
+    except ValueError:
+        return
+    snap_to_beats(p, catalog)
+    beat = 60.0 / TRACKS[p["audio_track"]]["bpm"]
+    for c in p["cuts"]:
+        n = c["duration_s"] / beat
+        assert abs(n - round(n)) < 0.01, f"off-grid cut: {c['duration_s']}s (beat {beat})"
+        assert 4 <= round(n) <= 8
+
+
 if __name__ == "__main__":
-    for t in [test_soundness, test_completeness, test_junk_raises_cleanly]:
+    for t in [test_soundness, test_completeness, test_junk_raises_cleanly,
+              test_snap_to_beats]:
         t()
         print("PASS", t.__name__)

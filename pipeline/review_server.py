@@ -44,9 +44,11 @@ def pending():
 def return_clips_to_pool(rid):
     used_path = os.path.join(BASE, "posted.json")
     plan = json.load(open(os.path.join(QUEUE, rid, "plan.json")))
-    used = set(json.load(open(used_path))) if os.path.exists(used_path) else set()
+    used = json.load(open(used_path)) if os.path.exists(used_path) else []
+    reel_clips = {c["clip"] for c in plan["cuts"]}
     tmp = used_path + ".tmp"
-    json.dump(sorted(used - {c["clip"] for c in plan["cuts"]}), open(tmp, "w"))
+    # posted.json is an ordered list (oldest first) so the recycler can expire the oldest half
+    json.dump([u for u in used if u not in reel_clips], open(tmp, "w"))
     os.replace(tmp, used_path)
 
 

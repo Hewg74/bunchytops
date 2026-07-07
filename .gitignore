@@ -28,3 +28,4 @@ pipeline/rejected/
 pipeline/*.json
 pipeline/cron.log
 bunchytops_reel_prototype.mp4
+reel_*.mp4
