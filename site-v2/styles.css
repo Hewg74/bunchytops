@@ -115,6 +115,9 @@ nav {
 .pill-listen:hover { transform: translateY(-1px); box-shadow: 0 0 40px var(--flare); }
 /* nav gains a solid Poster Paper backing once scrolled off the hero (links stay legible over dark sections) */
 nav.scrolled { background: var(--canvas); border-bottom: 1px solid rgba(59,50,42,0.18); }
+/* name appears once: wordmark hidden while the hero title is on screen, fades in on scroll */
+nav .wordmark { opacity: 0; transition: opacity 400ms var(--swell); }
+nav.scrolled .wordmark { opacity: 1; }
 /* mobile: keep wayfinding - stack the three links under the wordmark, compact; pill stays >=44px tap */
 @media (max-width: 620px) {
   nav { flex-wrap: wrap; padding: 12px var(--gutter); }
@@ -188,12 +191,12 @@ nav.scrolled { background: var(--canvas); border-bottom: 1px solid rgba(59,50,42
 /* hand-pulled bounce: deterministic per-glyph offset/rotate/scale (static, not animated) */
 .g { display: inline-block; transform-origin: center 60%; }
 .w { white-space: nowrap; } /* words never break across lines: glyph spans made letters wrappable */
-.g:nth-child(4n+1) { transform: translateY(-0.06em) rotate(-2.5deg) scale(1.04); }
-.g:nth-child(4n+2) { transform: translateY(0.03em) rotate(2.5deg) scale(0.98); }
-.g:nth-child(4n+3) { transform: translateY(-0.02em) rotate(-1.5deg) scale(1.06); }
-.g:nth-child(4n+4) { transform: translateY(0.05em) rotate(2deg) scale(0.97); }
-.g.hard-up { transform: translateY(-0.11em) rotate(-3deg) scale(1.05); }
-.g.hard-down { transform: translateY(0.10em) rotate(3.5deg) scale(1.02); }
+.g:nth-child(4n+1) { transform: translateY(-0.03em) rotate(-1.2deg); }
+.g:nth-child(4n+2) { transform: translateY(0.015em) rotate(1.1deg); }
+.g:nth-child(4n+3) { transform: translateY(-0.01em) rotate(-0.7deg); }
+.g:nth-child(4n+4) { transform: translateY(0.025em) rotate(0.9deg); }
+.g.hard-up { transform: translateY(-0.055em) rotate(-1.6deg); }
+.g.hard-down { transform: translateY(0.05em) rotate(1.8deg); }
 .line-title:hover { text-shadow: 5px 5px 0 var(--ink), -2px 0 0 var(--misprint-a), 2px 0 0 var(--misprint-b); }
 .sub { font-size: clamp(15px, 1.4vw, 18px); color: var(--ink-muted); max-width: 46ch; margin-bottom: 30px; font-weight: 300; }
 .cta-row { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
