@@ -18,3 +18,13 @@ site/assets/video/*-full.mp4
 Thumbs.db
 
 .vercel
+
+# reel pipeline runtime state (lives on the VM)
+pipeline/clips/
+pipeline/proxies/
+pipeline/queue/
+pipeline/published/
+pipeline/rejected/
+pipeline/*.json
+pipeline/cron.log
+bunchytops_reel_prototype.mp4
