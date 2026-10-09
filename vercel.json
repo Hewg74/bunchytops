@@ -1,3 +1,9 @@
 {
-  "outputDirectory": "site-v2"
+  "outputDirectory": "site-v2",
+  "git": {
+    "deploymentEnabled": {
+      "**": false,
+      "main": true
+    }
+  }
 }
